@@ -1,46 +1,35 @@
 import { ScheduledHandler } from 'aws-lambda'
 import AWS from 'aws-sdk'
-import { SendEmailRequest } from 'aws-sdk/clients/ses'
+import fetch from 'node-fetch'
 
 const newstickerUrl =
   'https://img.srv2.de/customer/sbahnMuenchen/newsticker/newsticker.html'
 
-const fromAddress = 'daniel@schleindlsperger.de'
-const toAddress = 'daniel@schleindlsperger.de'
-const ses = new AWS.SES({ region: 'eu-west-1' })
+const bucket = process.env.BUCKET_NAME
+const s3 = new AWS.S3({ region: 'eu-west-1' })
+
+const noError = /Aktuell liegen uns keine Meldungen vor./i
 
 export const handler: ScheduledHandler = async event => {
-  const subject = `S-Bahn Status - ${new Date().toLocaleDateString()}`
-
-  const htmlBody = `
-    <!DOCTYPE html>
-    <html>
-      <head></head>
-      <body>
-        <h1>${subject}/h1>
-        <iframe src="${newstickerUrl}"></iframe>
-      </body>
-    </html>
-  `
-
-  const sesParams: SendEmailRequest = {
-    Source: fromAddress,
-    Destination: {
-      ToAddresses: [toAddress],
-    },
-    Message: {
-      Body: {
-        Html: {
-          Charset: 'UTF-8',
-          Data: htmlBody,
-        },
-      },
-      Subject: {
-        Charset: 'UTF-8',
-        Data: subject,
-      },
-    },
+  if (typeof bucket !== 'string') {
+    throw new Error('bucket name not defined')
   }
 
-  await ses.sendEmail(sesParams).promise()
+  const body = await fetch(newstickerUrl).then(res => res.text())
+
+  if (noError.test(body)) {
+    console.log('Keine Meldungen')
+    return
+  }
+
+  console.log({ body })
+
+  await s3
+    .putObject({
+      Bucket: bucket,
+      Key: `${new Date().toISOString()}.html`,
+      Body: body,
+      ContentType: 'text/html',
+    })
+    .promise()
 }
