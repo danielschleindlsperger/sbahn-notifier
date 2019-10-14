@@ -1,0 +1,28 @@
+{
+  "name": "y",
+  "version": "1.0.0",
+  "description": "Check S-Bahn for my routes and notify",
+  "main": "''",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Daniel Schleindlsperger <daniel@schleindlsperger.de>",
+  "license": "ISC",
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.33",
+    "husky": "^3.0.9",
+    "jest": "^24.9.0",
+    "pretty-quick": "^2.0.0",
+    "serverless-plugin-typescript": "^1.1.9",
+    "typescript": "^3.6.4"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.549.0",
+    "node-fetch": "^2.6.0"
+  }
+}
