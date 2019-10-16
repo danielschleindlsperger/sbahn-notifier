@@ -4,7 +4,8 @@
   "description": "Check S-Bahn for my routes and notify",
   "main": "''",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "typecheck": "tsc"
   },
   "author": "Daniel Schleindlsperger <daniel@schleindlsperger.de>",
   "license": "ISC",
@@ -14,16 +15,26 @@
     }
   },
   "devDependencies": {
+    "@babel/core": "^7.6.4",
+    "@babel/preset-env": "^7.6.3",
+    "@babel/preset-typescript": "^7.6.0",
     "@types/aws-lambda": "^8.10.33",
+    "@types/cheerio": "^0.22.13",
+    "@types/jest": "^24.0.19",
+    "@types/node": "^12.11.1",
     "@types/node-fetch": "^2.5.2",
+    "babel-loader": "^8.0.6",
+    "core-js": "^3.3.2",
     "husky": "^3.0.9",
     "jest": "^24.9.0",
     "pretty-quick": "^2.0.0",
-    "serverless-plugin-typescript": "^1.1.9",
-    "typescript": "^3.6.4"
+    "serverless-webpack": "^5.3.1",
+    "typescript": "^3.6.4",
+    "webpack": "^4.41.2"
   },
   "dependencies": {
     "aws-sdk": "^2.549.0",
+    "cheerio": "^1.0.0-rc.3",
     "node-fetch": "^2.6.0"
   }
 }
